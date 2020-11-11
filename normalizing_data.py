@@ -61,3 +61,44 @@ try:
 except psycopg2.Error as e:
     print("Error: Inserting Rows")
     print (e)
+
+
+# move data to 2nd normal form, creating a unique primary key for each row
+# break up data into two tables, transactions & albums sold
+
+try:
+    cur.execute("CREATE TABLE IF NOT EXISTS transactions (transaction_id int, \
+    customer_name varchar, cashier_name varchar, year int);")
+except psycopg2.Error as e:
+    print("Error: Issue creating table")
+    print (e)
+
+try:
+    cur.execute("CREATE TABLE IF NOT EXISTS albums_sold (album_id int, transaction_id int, album_name varchar);")
+except psycopg2.Error as e:
+    print("Error: Issue creating table")
+    print (e)
+
+try:
+    cur.execute("INSERT INTO transactions (transaction_id, customer_name, cashier_name, year) \
+                 VALUES (%s, %s, %s, %s)", \
+                 (1, 'Amanda', 'Sam', 2000))
+except psycopg2.Error as e:
+    print("Error: Inserting Rows")
+    print (e)
+
+try:
+    cur.execute("INSERT INTO albums_sold (album_id, transaction_id, album_name) \
+                 VALUES (%s, %s, %s)", \
+                 (1, 1, 'Rubber Soul'))
+except psycopg2.Error as e:
+    print("Error: Inserting Rows")
+    print (e)
+
+try:
+    cur.execute("INSERT INTO albums_sold (album_id, transaction_id, album_name) \
+                 VALUES (%s, %s, %s)", \
+                 (2, 1, 'Let it Be'))
+except psycopg2.Error as e:
+    print("Error: Inserting Rows")
+    print (e)
