@@ -102,3 +102,35 @@ try:
 except psycopg2.Error as e:
     print("Error: Inserting Rows")
     print (e)
+
+# move to 3rd normal form
+try:
+    cur.execute("CREATE TABLE IF NOT EXISTS transactions2 (transaction_id int, \
+    cashier_id int, customer_name varchar, year int);")
+
+except psycopg2.Error as e:
+    print("Error: Issue creating table")
+    print (e)
+
+try:
+    cur.execute("CREATE TABLE IF NOT EXISTS employees (employee_id int, employee_name varchar);")
+except psycopg2.Error as e:
+    print("Error: Issue creating table")
+    print (e)
+
+try:
+    cur.execute("INSERT INTO transactions2 (transaction_id, \
+    cashier_id, customer_name, year) \
+                 VALUES (%s, %s, %s, %s)", \
+                 (1, 1, 'Amanda', 2000 ))
+except psycopg2.Error as e:
+    print("Error: Inserting Rows")
+    print (e)
+
+try:
+    cur.execute("INSERT INTO employees (employee_id, employee_name) \
+                 VALUES (%s, %s)", \
+                 (1, 'Sam'))
+except psycopg2.Error as e:
+    print("Error: Inserting Rows")
+    print (e)
