@@ -1,8 +1,8 @@
 import psycopg2
-
+import vars
 # connect to db
 try:
-    conn = psycopg2.connect("host=127.0.0.1 dbname=studentdb user=student password=student")
+    conn = psycopg2.connect(f"host=127.0.0.1 dbname={vars.creds['dbname']} user={vars.creds['user']} password={vars.creds['password']}")
 except psycopg2.Error as e:
     print("Error: Could not make connection to the Postgres database")
     print(e)
