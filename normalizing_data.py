@@ -1,8 +1,8 @@
 import psycopg2
-
+import vars
 # connect to db
 try:
-    conn = psycopg2.connect("host=127.0.0.1 dbname=studentdb user=student password=student")
+    conn = psycopg2.connect(f"host=127.0.0.1 dbname={vars.creds['dbname']} user={vars.creds['user']} password={vars.creds['password']}")
 except psycopg2.Error as e:
     print("Error: Could not make connection to the Postgres database")
     print(e)
@@ -21,7 +21,7 @@ try:
     year int, albums_purchased text[])")
 except psycopg2.Error as e:
     print("Error: Issue creating table")
-    print (e)
+    print(e)
 
 try:
     cur.execute("INSERT INTO music_store (transaction_id, \
@@ -31,7 +31,7 @@ try:
                  'Let it Be']))
 except psycopg2.Error as e:
     print("Error: Inserting Rows")
-    print (e)
+    print(e)
 
 
 # move data to 1st normal form
@@ -42,7 +42,7 @@ try:
     year int, songname varchar);")
 except psycopg2.Error as e:
     print("Error: Issue creating table")
-    print (e)
+    print(e)
 
 try:
     cur.execute("INSERT INTO music_store2 (transaction_id, \
@@ -51,7 +51,7 @@ try:
                  (1, 'Amanda', 'Sam', 2000, 'Rubber Soul'))
 except psycopg2.Error as e:
     print("Error: Inserting Rows")
-    print (e)
+    print(e)
 
 try:
     cur.execute("INSERT INTO music_store2 (transaction_id, \
@@ -71,13 +71,13 @@ try:
     customer_name varchar, cashier_name varchar, year int);")
 except psycopg2.Error as e:
     print("Error: Issue creating table")
-    print (e)
+    print(e)
 
 try:
     cur.execute("CREATE TABLE IF NOT EXISTS albums_sold (album_id int, transaction_id int, album_name varchar);")
 except psycopg2.Error as e:
     print("Error: Issue creating table")
-    print (e)
+    print(e)
 
 try:
     cur.execute("INSERT INTO transactions (transaction_id, customer_name, cashier_name, year) \
@@ -85,7 +85,7 @@ try:
                  (1, 'Amanda', 'Sam', 2000))
 except psycopg2.Error as e:
     print("Error: Inserting Rows")
-    print (e)
+    print(e)
 
 try:
     cur.execute("INSERT INTO albums_sold (album_id, transaction_id, album_name) \
@@ -93,7 +93,7 @@ try:
                  (1, 1, 'Rubber Soul'))
 except psycopg2.Error as e:
     print("Error: Inserting Rows")
-    print (e)
+    print(e)
 
 try:
     cur.execute("INSERT INTO albums_sold (album_id, transaction_id, album_name) \
@@ -101,7 +101,7 @@ try:
                  (2, 1, 'Let it Be'))
 except psycopg2.Error as e:
     print("Error: Inserting Rows")
-    print (e)
+    print(e)
 
 # move to 3rd normal form
 try:
@@ -110,13 +110,13 @@ try:
 
 except psycopg2.Error as e:
     print("Error: Issue creating table")
-    print (e)
+    print(e)
 
 try:
     cur.execute("CREATE TABLE IF NOT EXISTS employees (employee_id int, employee_name varchar);")
 except psycopg2.Error as e:
     print("Error: Issue creating table")
-    print (e)
+    print(e)
 
 try:
     cur.execute("INSERT INTO transactions2 (transaction_id, \
@@ -125,7 +125,7 @@ try:
                  (1, 1, 'Amanda', 2000 ))
 except psycopg2.Error as e:
     print("Error: Inserting Rows")
-    print (e)
+    print(e)
 
 try:
     cur.execute("INSERT INTO employees (employee_id, employee_name) \
@@ -133,4 +133,4 @@ try:
                  (1, 'Sam'))
 except psycopg2.Error as e:
     print("Error: Inserting Rows")
-    print (e)
+    print(e)
