@@ -64,9 +64,11 @@ def copy_song_and_artist_data_to_postgres(cur):
         # cur.copy_from(f, 'artists', sep=',', columns=('artist_id', 'name', 'location', 'latitude', 'longitude'))
 
 
-def process_data(cur, conn, filepath, func, data=[]):
+def process_data(cur, conn, filepath, func, data=None):
     """function to iterate through each file within the log and song datasets and call the process_song_file and process_log_file to insert data into the respective tables in our Sparkify database"""
 
+    if data is None:
+        data = []
     all_files = get_files(filepath)
 
     # get total number of files found
