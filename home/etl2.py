@@ -2,10 +2,12 @@ import os
 import glob
 import psycopg2
 import pandas as pd
-from sql_queries import *
+from home.sql_queries import *
 import json
 import csv
-import vars
+from home.vars import *
+
+# from home.vars import sparkify_creds
 
 
 def get_files(filepath):
@@ -16,6 +18,7 @@ def get_files(filepath):
         for f in files:
             all_files.append(os.path.abspath(f))
     return all_files
+
 
 def extract_song_data(filepath, data):
     # read song json file via pandas
@@ -50,11 +53,14 @@ def extract_artist_data(filepath, data):
 
 
 def process_song_file(cur, filepath, data):
+    """convert song data files from json to csv for easier processing"""
     extract_song_data(filepath, data)
     extract_artist_data(filepath, data)
 
 
-def copy_song_and_artist_data_to_postgres(cur):
+# def process_log_file(cur, filepath, data):
+
+def copy_song_and_artist_data_to_postgres(cur, conn=None):
 
     with open('songs_file.csv') as f:
         cur.copy_from(f, 'songs', sep=',')
@@ -70,7 +76,6 @@ def process_data(cur, conn, filepath, func, data=None):
     if data is None:
         data = []
     all_files = get_files(filepath)
-
     # get total number of files found
     num_files = len(all_files)
     # iterate over files and write all json objects to a single file for processing
@@ -81,12 +86,16 @@ def process_data(cur, conn, filepath, func, data=None):
     copy_song_and_artist_data_to_postgres(cur)
 
 
-def main():
-    # connect to db
-    conn = psycopg2.connect(f"host=127.0.0.1 dbname={vars.sparkify_creds['dbname']} user={vars.sparkify_creds['user']} password={vars.sparkify_creds['password']}")
+def connect_to_db():
+    conn = psycopg2.connect(f"host=127.0.0.1 dbname={sparkify_creds['dbname']} user={sparkify_creds['user']} password={sparkify_creds['password']}")
     cur = conn.cursor()
 
-    process_data(cur, conn, filepath='data/song_data', func=process_song_file)
+    return cur, conn
+
+
+def main():
+    cur, conn = connect_to_db()
+    process_data(cur, conn, filepath='home/data/song_data', func=process_song_file)
     conn.commit()
     conn.close()
 
